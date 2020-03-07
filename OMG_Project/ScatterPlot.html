@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OMG</title>
+    
+    <script src="jquery-1.11.0.min.js"></script>
+         <script type="text/javascript" src="download.js"></script>
+         
+<!--	<link type="text/css" rel="stylesheet" href="D:\Apache24\htdocs\c\css">-->
+</head>
+<style>
+body{
+	background-color: #F4F4F4;
+}
+table td{
+	height: 50px;
+}
+
+Button,label{
+	position: relative;
+	display: inline-block;  
+    background: #ECF6FF;  
+    border: 1px solid #99D3F5;  
+    border-radius: 4px;   
+    overflow: hidden;  
+    color: #4F3B3C;  
+    text-decoration: none;  
+    text-indent: 0;  
+    line-height: 40px;
+	font-family: Consolas, "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", Monaco, "Courier New", "monospace";
+	font-size: 17px;
+}
+label{
+	width: 85%;
+	padding: 4px 0px; 
+}
+Button{
+	background: #C2ADAD; 
+	width: 220px;
+}
+label:hover{
+	background: #AADFFD;  
+    border-color: #78C3F3;  
+    color: #004974;  
+    text-decoration: none; 
+
+}
+Button:hover{
+	background: #AA7A7B;  
+    border-color: #78C3F3;  
+    color: #004974;  
+    text-decoration: none;
+}
+input{
+	opacity: 0;
+	position: absolute;
+	font-size: 100px;  
+    right: 0;  
+    top: 0;  
+}
+.card{
+	width: 33%;
+	float: left;
+}
+.txtarea{
+	display: block;
+	width: 80%; 
+	height: 400px; 
+	padding: 6px 12px; 
+	margin-bottom: 40px;
+	font-size: 14px; 
+	line-height: 1.428571429; 
+	color: #555555; 
+	vertical-align: middle; 
+	background-color: #ffffff; 
+	border: 1px solid #cccccc; 
+	border-radius: 4px; 
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); 
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); 
+	-webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s; 
+	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+.txtarea:focus { 
+	border-color: #66afe9; 
+	outline: 0; 
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6); 
+	box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6); 
+} 
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.dot {
+  stroke: #000;
+}
+
+.tooltip {
+  position: absolute;
+  width: 200px;
+	background: #D0A7A8;
+	pointer-events: none;
+}
+	#upload{
+		display: block;
+	}
+	#scatter{
+		display: none;
+		font: 11px sans-serif;
+	}
+	#Relat{
+		display: none;
+	}
+</style>
+	
+<body>
+<script src="d3.v3.min.js"></script>
+<script type="text/javascript">
+
+if(window.localStorage){
+    alert('This browser supports localStorage');
+}else{
+    alert('This browser does NOT support localStorage');
+} //数据传输
+  
+//判断浏览器是否支持FileReader接口 
+//if(typeof FileReader == 'undefined'){ 
+//   result.InnerHTML="<p>你的浏览器不支持FileReader接口！</p>"; 
+    //使选择控件不可操作 
+//   data1.setAttribute("disabled","disabled"); 
+//} 
+	
+
+var tmp1,tmp2,tmp3;
+window.onload = function() {
+	let input1 = document.getElementById("data1");//得到上传按钮的对象
+  //console.log(info);                         //测试用
+  input1.onchange = function() {                //给按钮的onchange写一个读取函数
+    const file = this.files[0];                //其实是可以扩展到多文件上传的，不过我们就选第一个，也就是下标0
+    if (!!file) {                              //!!是一个js的语法，表示后面的变量不是null/undefined/空串，实用写法。
+      const reader = new FileReader();         //实例化一个FileReader对象
+      reader.readAsText(file, "gbk");          //借助 FileReader 的方法，按照文本格式读入文件，第二个参数是编码方式（可空）
+      reader.onload = function() {
+	   var result=document.getElementById("txt");  
+        //显示文件  
+        result.value='['+this.result+']'; 
+        tmp1 = this.result;  
+		  //然后在FileReader的onload方法里，刚刚读入的文件能以文本的形式得到了
+        //注意这个对象还是文本，不能拿来直接用，但首先你可以把它带出来。
+        //(不推荐也不反对用全局变量)
+      };
+    }
+  };
+  //...
+  
+  let input2 = document.getElementById("data2");
+  //console.log(info);                  
+  input2.onchange = function() {           
+    const file = this.files[0];            
+    if (!!file) {                    
+      const reader = new FileReader(); 
+      reader.readAsText(file, "gbk");       
+      reader.onload = function() {
+	   var result=document.getElementById("txt1");  
+        //显示文件  
+        result.value='['+this.result+']'; 
+        tmp2 = this.result;    
+		  
+      };
+    }
+  };
+  //...
+  
+  
+  let input3 = document.getElementById("data3");
+  //console.log(info);                 
+  input3.onchange = function() {            
+    const file = this.files[0];      
+    if (!!file) {                    
+      const reader = new FileReader();         
+      reader.readAsText(file, "gbk");         
+      reader.onload = function() {
+	   var result=document.getElementById("txt2");  
+        //显示文件  
+        result.value='['+this.result+']'; 
+        tmp3 = this.result;
+		  
+      };
+    }
+  };
+  //...
+	
+	
+};
+
+</script>
+	
+	
+	<div id="upload" align="center">
+	<h1>Scatter Plot Drawing By JSON</h1>
+		<div align="center" style="margin: 50px;width: 90%">
+	<div class="card">
+    <p> 
+		<label>CHOOSE INFO FILE：
+        <input type="file" id="data1" /> </label> 
+    </p> 
+	<textarea id="txt" class='txtarea'></textarea>
+	</div>
+	
+	<div class="card">
+	<p>
+		<label>CHOOSE G1 FILE： 
+        <input type="file" id="data2" /></label> 
+    </p> 
+	<textarea id="txt1" class='txtarea'></textarea>
+	</div>
+	
+	<div class="card">
+	<p> 
+		<label>CHOOSE G2 FILE： 
+        <input type="file" id="data3" /> </label>
+    </p> 
+	<textarea id="txt2" class='txtarea'></textarea>
+	<p>
+	</div>
+			
+	<button class="download">DRAW SCATTER PLOT</button>
+	</p>
+	
+		</div>
+	</div>
+	
+	
+	<div id="scatter">
+	</div>
+	
+	
+	
+	<div id="Relat" style="margin-left:10%;width: 80%;padding-bottom: 300px" align="center">
+    <h2>数&nbsp;据&nbsp;分&nbsp;析</h2>
+		
+	<table id="tb" border="1" cellpadding="0" cellspacing="0" width="1300" style="text-align: center;">
+        
+    </table>
+	</div>
+	
+	
+</body>
+</html>
